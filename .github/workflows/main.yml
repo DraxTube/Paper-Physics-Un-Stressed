@@ -1,0 +1,41 @@
+name: Build NDS ROM
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Paper Physics NDS
+    runs-on: ubuntu-latest
+    container:
+      image: devkitpro/devkitarm:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build ROM
+        run: |
+          export DEVKITPRO=/opt/devkitpro
+          export DEVKITARM=$DEVKITPRO/devkitARM
+          export PATH=$DEVKITARM/bin:$PATH
+          make
+
+      - name: Upload NDS ROM
+        uses: actions/upload-artifact@v4
+        with:
+          name: PaperPhysics-NDS
+          path: "*.nds"
+          if-no-files-found: error
+
+      - name: Create Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: "*.nds"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
