@@ -32,10 +32,21 @@ static GameState    g_game;
 static u8 g_mic_buffer[MIC_BUFFER_SIZE];
 
 static int get_mic_volume(void) {
-    /* Read mic samples */
+    /* Check for emulator / no-mic: if all samples are identical, return 0 */
+    bool all_same = true;
+    u8 first = g_mic_buffer[0];
+    for (int i = 1; i < MIC_BUFFER_SIZE; i++) {
+        if (g_mic_buffer[i] != first) {
+            all_same = false;
+            break;
+        }
+    }
+    if (all_same) return 0; /* No real mic input */
+
+    /* Calculate peak amplitude relative to center (128 = silence for 8-bit unsigned) */
     int peak = 0;
     for (int i = 0; i < MIC_BUFFER_SIZE; i++) {
-        int sample = g_mic_buffer[i] - 128;
+        int sample = (int)g_mic_buffer[i] - 128;
         if (sample < 0) sample = -sample;
         if (sample > peak) peak = sample;
     }
@@ -151,6 +162,9 @@ int main(void) {
     videoSetModeSub(MODE_0_2D);
     vramSetBankC(VRAM_C_SUB_BG);
     consoleInit(NULL, 0, BgType_Text4bpp, BgSize_T_256x256, 31, 0, false, true);
+
+    /* Initialize microphone buffer to silence (0x80 = center for unsigned 8-bit) */
+    memset(g_mic_buffer, 0x80, MIC_BUFFER_SIZE);
 
     /* Initialize microphone and sound */
     soundEnable();
