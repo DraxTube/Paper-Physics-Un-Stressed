@@ -166,9 +166,10 @@ int main(void) {
     /* Initialize microphone buffer to silence (0x80 = center for unsigned 8-bit) */
     memset(g_mic_buffer, 0x80, MIC_BUFFER_SIZE);
 
-    /* Initialize microphone and sound */
+    /* Initialize sound */
     soundEnable();
-    soundMicRecord(g_mic_buffer, MIC_BUFFER_SIZE, MicFormat_8Bit, 8000, NULL);
+    /* Mic recording disabled — emulators produce noise that causes physics issues */
+    /* soundMicRecord(g_mic_buffer, MIC_BUFFER_SIZE, MicFormat_8Bit, 8000, NULL); */
     sound_init();
 
     /*--- Show Splash Screen ---*/
@@ -254,26 +255,26 @@ int main(void) {
         tools_update(&g_tools, &g_world, &g_ragdoll,
                     touch.px, touch.py, touching, just_pressed, just_released);
 
-        /*--- Microphone Wind ---*/
+        /*--- Microphone Wind (disabled — emulators produce fake mic noise) ---*/
+        /* To re-enable on real hardware, uncomment the block below */
+        /*
         {
             static int wind_sfx_cooldown = 0;
             if (wind_sfx_cooldown > 0) wind_sfx_cooldown--;
-
             int mic_vol = get_mic_volume();
             if (mic_vol > 50) {
-                /* Strong blow → upward force (scaled for gentle gravity) */
                 int32_t wind_force = INT_TO_FP(mic_vol - 50) >> 5;
-                if (g_world.gravity_flipped) {
+                if (g_world.gravity_flipped)
                     physics_apply_wind(&g_world, 0, wind_force);
-                } else {
+                else
                     physics_apply_wind(&g_world, 0, -wind_force);
-                }
                 if (wind_sfx_cooldown == 0) {
                     sound_play(SFX_WIND);
                     wind_sfx_cooldown = 30;
                 }
             }
         }
+        */
 
         /*--- Physics Step ---*/
         physics_step(&g_world);
@@ -318,7 +319,7 @@ int main(void) {
     }
 
     /* Cleanup */
-    soundMicOff();
+    /* soundMicOff(); */
 
     return 0;
 }
