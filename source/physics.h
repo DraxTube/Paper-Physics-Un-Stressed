@@ -25,8 +25,7 @@
 #define MAX_CONSTRAINTS  96
 #define SOLVER_ITERATIONS 6
 
-#define SCREEN_WIDTH     256
-#define SCREEN_HEIGHT    192
+/* Use libnds SCREEN_WIDTH (256) and SCREEN_HEIGHT (192) */
 #define WALL_BOUNCE      FLOAT_TO_FP(0.4f)
 #define FRICTION         FLOAT_TO_FP(0.998f)
 

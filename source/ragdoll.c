@@ -2,13 +2,6 @@
 #include "sound.h"
 #include <string.h>
 
-/*=============================================================================
- * BODY PROPORTIONS (in pixels, converted to fixed-point at creation)
- *===========================================================================*/
-#define HEAD_RADIUS     INT_TO_FP(6)
-#define BODY_RADIUS     INT_TO_FP(3)
-#define LIMB_RADIUS     INT_TO_FP(2)
-
 /* Bone color — pencil gray on notebook */
 #define BONE_COLOR      RGB15(8, 8, 8)
 #define HEAD_COLOR      RGB15(10, 10, 10)

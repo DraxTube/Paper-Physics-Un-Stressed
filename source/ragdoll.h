@@ -18,6 +18,11 @@
  *       (LFOOT) (RFOOT)
  *===========================================================================*/
 
+/* Body proportions (fixed-point pixel values) */
+#define HEAD_RADIUS     INT_TO_FP(6)
+#define BODY_RADIUS     INT_TO_FP(3)
+#define LIMB_RADIUS     INT_TO_FP(2)
+
 /* Particle indices within the ragdoll */
 #define RAGDOLL_HEAD    0
 #define RAGDOLL_NECK    1

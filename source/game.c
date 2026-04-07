@@ -213,14 +213,14 @@ void game_print_hud(GameState *gs, Ragdoll *doll, ToolState *ts, PhysicsWorld *w
         iprintf("\x1b[15;1H");
         switch (gs->mode) {
             case MODE_MISSION_AIRBORNE:
-                iprintf("Airborne: %d/%d sec",
+                iprintf("Airborne: %ld/%ld sec",
                     gs->mission_timer / 60, gs->mission_goal / 60);
                 break;
             case MODE_MISSION_TARGET:
                 iprintf("Fling ragdoll to target!");
                 break;
             case MODE_MISSION_BRIDGE:
-                iprintf("Support: %d/%d sec",
+                iprintf("Support: %ld/%ld sec",
                     gs->mission_timer / 60, gs->mission_goal / 60);
                 break;
             default:
