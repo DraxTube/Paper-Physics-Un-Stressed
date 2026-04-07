@@ -44,7 +44,7 @@ static int32_t distance_sq(int32_t x1, int32_t y1, int32_t x2, int32_t y2) {
 void physics_init(PhysicsWorld *world) {
     memset(world, 0, sizeof(PhysicsWorld));
     world->gravity_x = 0;
-    world->gravity_y = FLOAT_TO_FP(0.35f);  /* Gravity pointing down */
+    world->gravity_y = FLOAT_TO_FP(0.045f);  /* Gentle gravity — playable on 192px screen */
     world->gravity_flipped = false;
 }
 

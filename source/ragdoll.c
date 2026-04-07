@@ -153,11 +153,18 @@ void ragdoll_update(Ragdoll *doll, PhysicsWorld *world) {
     doll->stress_level = FP_MUL(doll->stress_level, FLOAT_TO_FP(0.97f));
     doll->stress_level += stress;
 
-    /* Play impact sound when stress spikes (wall hits) */
-    if (stress > INT_TO_FP(2)) {
-        int intensity = FP_TO_INT(stress) * 4;
-        if (intensity > 127) intensity = 127;
-        sound_play_impact(intensity);
+    /* Play impact sound when stress spikes (wall hits) — with cooldown */
+    {
+        static int impact_cooldown = 0;
+        if (impact_cooldown > 0) impact_cooldown--;
+
+        if (stress > INT_TO_FP(8) && impact_cooldown == 0) {
+            int intensity = FP_TO_INT(stress) * 3;
+            if (intensity > 127) intensity = 127;
+            if (intensity < 20) intensity = 20;
+            sound_play_impact(intensity);
+            impact_cooldown = 20; /* Don't play again for 20 frames (~0.33s) */
+        }
     }
 
     /* Clamp stress */

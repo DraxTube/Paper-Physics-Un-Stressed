@@ -26,8 +26,8 @@
 #define SOLVER_ITERATIONS 6
 
 /* Use libnds SCREEN_WIDTH (256) and SCREEN_HEIGHT (192) */
-#define WALL_BOUNCE      FLOAT_TO_FP(0.4f)
-#define FRICTION         FLOAT_TO_FP(0.998f)
+#define WALL_BOUNCE      FLOAT_TO_FP(0.5f)
+#define FRICTION         FLOAT_TO_FP(0.99f)
 
 /*=============================================================================
  * DATA STRUCTURES

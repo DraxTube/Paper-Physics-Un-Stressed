@@ -241,16 +241,24 @@ int main(void) {
                     touch.px, touch.py, touching, just_pressed, just_released);
 
         /*--- Microphone Wind ---*/
-        int mic_vol = get_mic_volume();
-        if (mic_vol > 40) {
-            /* Strong blow → upward force */
-            int32_t wind_force = INT_TO_FP(mic_vol - 40) >> 3;
-            if (g_world.gravity_flipped) {
-                physics_apply_wind(&g_world, 0, wind_force);
-            } else {
-                physics_apply_wind(&g_world, 0, -wind_force);
+        {
+            static int wind_sfx_cooldown = 0;
+            if (wind_sfx_cooldown > 0) wind_sfx_cooldown--;
+
+            int mic_vol = get_mic_volume();
+            if (mic_vol > 50) {
+                /* Strong blow → upward force (scaled for gentle gravity) */
+                int32_t wind_force = INT_TO_FP(mic_vol - 50) >> 5;
+                if (g_world.gravity_flipped) {
+                    physics_apply_wind(&g_world, 0, wind_force);
+                } else {
+                    physics_apply_wind(&g_world, 0, -wind_force);
+                }
+                if (wind_sfx_cooldown == 0) {
+                    sound_play(SFX_WIND);
+                    wind_sfx_cooldown = 30;
+                }
             }
-            sound_play(SFX_WIND);
         }
 
         /*--- Physics Step ---*/
